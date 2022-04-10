@@ -65,7 +65,7 @@ namespace XboxWebApi.Cli
 
                     if (!String.IsNullOrEmpty(args.TokenFilepath))
                     {
-                        success = await authenticator.DumpToJsonFileAsync(args.TokenFilepath);
+                        success = authenticator.DumpToJsonFile(args.TokenFilepath);
                         if (!success)
                         {
                             Console.WriteLine($"Failed to dump tokens to {args.TokenFilepath}");
@@ -125,7 +125,7 @@ namespace XboxWebApi.Cli
 
                 if (!String.IsNullOrEmpty(args.TokenFilepath))
                 {
-                    success = await authenticator.DumpToJsonFileAsync(args.TokenFilepath);
+                    success = authenticator.DumpToJsonFile(args.TokenFilepath);
                     if (!success)
                     {
                         Console.WriteLine($"Failed to dump tokens to {args.TokenFilepath}");
@@ -149,11 +149,11 @@ namespace XboxWebApi.Cli
             try
             {
                 Console.WriteLine("Loading tokens from file...");
-                var authService = await AuthenticationService.LoadFromJsonFileAsync(args.TokenFilepath);
+                var authService = AuthenticationService.LoadFromJsonFile(args.TokenFilepath);
                 Console.WriteLine("Refreshing tokens...");
                 await authService.AuthenticateAsync();
                 Console.WriteLine("Saving refreshed tokens to file...");
-                await authService.DumpToJsonFileAsync(args.TokenFilepath);
+                authService.DumpToJsonFile(args.TokenFilepath);
             }
             catch (Exception exc)
             {

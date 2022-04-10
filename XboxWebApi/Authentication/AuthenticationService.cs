@@ -109,19 +109,19 @@ namespace XboxWebApi.Authentication
         /// </summary>
         /// <param name="targetFilePath">Target JSON filepath</param>
         /// <returns>Returns true on success, false otherwise</returns>
-        public async Task<bool> DumpToJsonFileAsync(string targetFilePath)
-            => await DumpToJsonFileAsync(this, targetFilePath);
+        public bool DumpToJsonFile(string targetFilePath)
+            => DumpToJsonFile(this, targetFilePath);
         
         /// <summary>
         /// Update tokens and userinformation from a JSON file
         /// </summary>
         /// <param name="sourceFilePath">Source JSON filepath</param>
         /// <returns>Returns true on success, false otherwise</returns>
-        public async Task<bool> UpdateFromJsonFileAsync(string sourceFilePath)
+        public bool UpdateFromJsonFile(string sourceFilePath)
         {
             try
             {
-                AuthenticationService tempObj = await LoadFromJsonFileAsync(sourceFilePath);
+                AuthenticationService tempObj = LoadFromJsonFile(sourceFilePath);
                 this.RefreshToken = tempObj.RefreshToken;
                 this.AccessToken = tempObj.AccessToken;
                 this.UserToken = tempObj.UserToken;
@@ -334,9 +334,9 @@ namespace XboxWebApi.Authentication
         /// </summary>
         /// <param name="sourceFilePath">JSON filepath</param>
         /// <returns>Instance of AuthenticationService</returns>
-        public async static Task<AuthenticationService> LoadFromJsonFileAsync(string sourceFilePath)
+        public static AuthenticationService LoadFromJsonFile(string sourceFilePath)
         {
-            string json = await File.ReadAllTextAsync(sourceFilePath, System.Text.Encoding.UTF8);
+            string json = File.ReadAllText(sourceFilePath, System.Text.Encoding.UTF8);
             return LoadFromJson(json);
         }
 
@@ -346,12 +346,12 @@ namespace XboxWebApi.Authentication
         /// <param name="obj">Instance of AuthenticationService</param>
         /// <param name="targetFilePath">JSON filepath</param>
         /// <returns></returns>
-        public async static Task<bool> DumpToJsonFileAsync(AuthenticationService obj, string targetFilePath)
+        public static bool DumpToJsonFile(AuthenticationService obj, string targetFilePath)
         {
             string json = DumpToJson(obj);
             try
             {
-                await File.WriteAllTextAsync(targetFilePath, json, System.Text.Encoding.UTF8);
+                File.WriteAllText(targetFilePath, json, System.Text.Encoding.UTF8);
                 return true;
             }
             catch (Exception exc)

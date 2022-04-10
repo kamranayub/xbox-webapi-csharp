@@ -45,11 +45,16 @@ namespace XboxWebApi.Services.Api
             return response;
         }
 
-        public async Task<HttpResponseMessage> GetAchievementsRecentProgressAsync(ulong xuid)
+        public async Task<HttpResponseMessage> GetAchievementsRecentProgressAsync(ulong xuid, AchievementTitleHistoryQuery query = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
                 $"users/xuid({xuid})/history/titles");
             request.Headers.Add(Headers_XONE);
+
+            if (query != null)
+            {
+                request.AddQueryParameter(query.GetQuery());
+            }
 
             var response = await HttpClient.SendAsync(request);
             return response;

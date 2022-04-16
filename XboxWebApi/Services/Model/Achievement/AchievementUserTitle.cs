@@ -6,7 +6,7 @@ namespace XboxWebApi.Services.Model.Achievement
 {
     public enum UserTitleTypeV2
     {
-        Unknown = -1,
+        Unknown = 0,
         Game,
         DGame,
         LiveApp
@@ -14,7 +14,7 @@ namespace XboxWebApi.Services.Model.Achievement
 
     public enum UserTitlePlatformV2
     {
-        Unknown = -1,
+        Unknown = 0,
         XboxOne,
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace XboxWebApi.Services.Model.Achievement
 
     public enum UserTitleTypeV1
     {
-        Unknown = -1,
+        Unknown = 0,
         Game = 1,
         DigitalGame = 3,
         App = 5
@@ -35,7 +35,7 @@ namespace XboxWebApi.Services.Model.Achievement
 
     public enum UserTitlePlatformV1
     {
-        Unknown = -1,
+        Unknown = 0,
         Xbox360 = 1,
         WindowsPhone = 15,
         WindowsStore = 17
@@ -142,7 +142,7 @@ namespace XboxWebApi.Services.Model.Achievement
         {
             get
             {
-                if (Enum.IsDefined(typeof(UserTitleTypeV1), TitleType))
+                if (Enum.IsDefined(typeof(UserTitleTypeV1), (int)TitleType))
                 {
                     return (UserTitleTypeV1)TitleType;
                 }
@@ -159,7 +159,7 @@ namespace XboxWebApi.Services.Model.Achievement
         {
             get
             {
-                return Platforms.Select(p => Enum.IsDefined(typeof(UserTitlePlatformV1), p) ? (UserTitlePlatformV1)p : UserTitlePlatformV1.Unknown).ToList();
+                return Platforms.Select(p => Enum.IsDefined(typeof(UserTitlePlatformV1), (int)p) ? (UserTitlePlatformV1)p : UserTitlePlatformV1.Unknown).ToList();
             }
         }
 

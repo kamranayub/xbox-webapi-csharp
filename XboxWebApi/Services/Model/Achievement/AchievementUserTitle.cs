@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace XboxWebApi.Services.Model.Achievement
 {
-    public enum UserTitlePlatformV2
+    public enum UserTitleTypeV2
     {
         Unknown = -1,
         Game,
@@ -12,11 +12,17 @@ namespace XboxWebApi.Services.Model.Achievement
         LiveApp
     }
 
-    public enum UserTitleTypeV2
+    public enum UserTitlePlatformV2
     {
         Unknown = -1,
         XboxOne,
-        Durango
+
+        /// <summary>
+        /// Xbox One Dev Kit
+        /// </summary>
+        Durango,
+
+        WindowsOneCore
     }
 
     public enum UserTitleTypeV1
@@ -49,11 +55,6 @@ namespace XboxWebApi.Services.Model.Achievement
         /// The unique identifier for the title.
         /// </summary>
         public uint TitleId { get; set; }
-
-        /// <summary>
-        /// The version of the title.
-        /// </summary>
-        public string TitleVersion { get; set; }
 
         /// <summary>
         /// ID of the primary service config set associated with the title.
@@ -137,15 +138,15 @@ namespace XboxWebApi.Services.Model.Achievement
         /// </summary>
         public uint TitleType { get; set; }
 
-        public UserTitleTypeV2 TitleTypeEnum
+        public UserTitleTypeV1 TitleTypeEnum
         {
             get
             {
-                if (Enum.IsDefined(typeof(UserTitleTypeV2), TitleType))
+                if (Enum.IsDefined(typeof(UserTitleTypeV1), TitleType))
                 {
-                    return (UserTitleTypeV2)TitleType;
+                    return (UserTitleTypeV1)TitleType;
                 }
-                return UserTitleTypeV2.Unknown;
+                return UserTitleTypeV1.Unknown;
             }
         }
 
@@ -154,11 +155,11 @@ namespace XboxWebApi.Services.Model.Achievement
         /// </summary>
         public ICollection<uint> Platforms { get; set; }
 
-        public ICollection<UserTitlePlatformV2> PlatformsEnum
+        public ICollection<UserTitlePlatformV1> PlatformsEnum
         {
             get
             {
-                return Platforms.Select(p => Enum.IsDefined(typeof(UserTitlePlatformV2), p) ? (UserTitlePlatformV2)p : UserTitlePlatformV2.Unknown).ToList();
+                return Platforms.Select(p => Enum.IsDefined(typeof(UserTitlePlatformV1), p) ? (UserTitlePlatformV1)p : UserTitlePlatformV1.Unknown).ToList();
             }
         }
 

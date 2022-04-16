@@ -45,6 +45,12 @@ namespace XboxWebApi.Services.Api
             return response;
         }
 
+        /// <summary>
+        /// Get V2 achievement title history
+        /// </summary>
+        /// <param name="xuid"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public async Task<HttpResponseMessage> GetAchievementsRecentProgressAsync(ulong xuid, AchievementTitleHistoryQuery query = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
@@ -84,11 +90,23 @@ namespace XboxWebApi.Services.Api
             return response;
         }
 
-        public async Task<HttpResponseMessage> GetAchievementsXbox360RecentProgressAsync(ulong xuid)
+
+        /// <summary>
+        /// Get V1 achievement title history
+        /// </summary>
+        /// <param name="xuid"></param>
+        /// <param name="titleId"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> GetAchievementsXbox360RecentProgressAsync(ulong xuid, AchievementTitleHistoryQuery query = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
                 $"users/xuid({xuid})/history/titles");
             request.Headers.Add(Headers_X360);
+
+            if (query != null)
+            {
+                request.AddQueryParameter(query.GetQuery());
+            }
 
             var response = await HttpClient.SendAsync(request);
             return response;

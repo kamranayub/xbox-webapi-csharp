@@ -22,6 +22,7 @@ namespace XboxWebApi.Authentication
         public TitleToken TitleToken { get; set; }
         public XToken XToken { get; set; }
         public XboxUserInformation UserInformation { get; set; }
+        public string ClientId { get; set; }
 
         /// <summary>
         /// Creates a HttpClient with provided baseUrl
@@ -111,7 +112,7 @@ namespace XboxWebApi.Authentication
         /// <returns>Returns true on success, false otherwise</returns>
         public bool DumpToJsonFile(string targetFilePath)
             => DumpToJsonFile(this, targetFilePath);
-        
+
         /// <summary>
         /// Update tokens and userinformation from a JSON file
         /// </summary>
@@ -148,17 +149,18 @@ namespace XboxWebApi.Authentication
         /// </summary>
         /// <param name="refreshToken">Windows Live refresh token</param>
         /// <returns>The gathered WindowsLiveResponse.</returns>
-        public static async Task<WindowsLiveResponse> RefreshLiveTokenAsync(
+        public async Task<WindowsLiveResponse> RefreshLiveTokenAsync(
             RefreshToken refreshToken)
         {
             logger.LogTrace("RefreshLiveTokenAsync() called");
             HttpClient client = ClientFactory("https://login.live.com/");
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "oauth20_token.srf");
-            var parameters = new Model.WindowsLiveRefreshQuery(refreshToken);
-            request.AddQueryParameter(parameters.GetQuery());
-            
-            var response = (await client.SendAsync(request)).EnsureSuccessStatusCode();
+            var request = new HttpRequestMessage(HttpMethod.Post, "oauth20_token.srf");            
+            var parameters = new WindowsLiveRefreshQuery(refreshToken, clientId: ClientId);
+            request.Content = new FormUrlEncodedContent(parameters.GetQuery());
+
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsJsonAsync<WindowsLiveResponse>(JsonNamingStrategy.SnakeCase);
         }
 
@@ -254,8 +256,8 @@ namespace XboxWebApi.Authentication
         public static string GetWindowsLiveAuthenticationUrl(Model.WindowsLiveAuthenticationQuery queryParams = null)
         {
             logger.LogTrace("GetWindowsLiveAuthenticationUrl() called");
-            var parameters = queryParams ?? new Model.WindowsLiveAuthenticationQuery();      
-            
+            var parameters = queryParams ?? new Model.WindowsLiveAuthenticationQuery();
+
             var url = QueryHelpers.AddQueryString(
                 "https://login.live.com/oauth20_authorize.srf",
                 parameters.GetQuery());

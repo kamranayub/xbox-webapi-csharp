@@ -21,7 +21,7 @@ namespace XboxWebApi.Authentication.Model
 			{
 				AuthMethod = authMethod,
                 SiteName = siteName,
-				RpsTicket = accessToken.Jwt
+				RpsTicket = "d=" + accessToken.Jwt
 			};
         }
     }

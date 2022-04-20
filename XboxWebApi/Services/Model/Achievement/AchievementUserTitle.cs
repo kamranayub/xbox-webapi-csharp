@@ -37,6 +37,7 @@ namespace XboxWebApi.Services.Model.Achievement
     {
         Unknown = 0,
         Xbox360 = 1,
+        PC = 2,
         WindowsPhone = 15,
         WindowsStore = 17
     }
